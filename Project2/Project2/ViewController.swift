@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     
     var countries = [String]()
     var score = 0
+    var correctAnswer = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,20 +28,63 @@ class ViewController: UIViewController {
         button2.layer.borderWidth = 1
         button3.layer.borderWidth = 1
         
-        button1.layer.borderColor = UIColor(red: 1.0, green: 0.2, blue: 0.4, alpha: 1.0).cgColor
-       // button1.layer.borderColor = UIColor.lightGray.cgColor
+        //button1.layer.borderColor = UIColor(red: 1.0, green: 0.2, blue: 0.4, alpha: 1.0).cgColor
+        // .layer is a CA - core animation layer that is lower level than UIStuff classes
+        // UIImage --- UIcolors
+        // CA layer --- cgColor
+        
+        button1.layer.borderColor = UIColor.lightGray.cgColor
         button2.layer.borderColor = UIColor.lightGray.cgColor
         button3.layer.borderColor = UIColor.lightGray.cgColor
-
         
         askQuestion()
     }
 
-    func askQuestion()
+    func askQuestion(action: UIAlertAction! = nil)
     {
+        // .shuffle() shuffle in place
+        // .shuffled() shuffle and return a new array
+        
+        countries.shuffle()
+        correctAnswer = Int.random(in: 0...2)
+        
         button1.setImage(UIImage(named: countries[0]), for: .normal)
         button2.setImage(UIImage(named: countries[1]), for: .normal)
         button3.setImage(UIImage(named: countries[2]), for: .normal)
+        
+        title = countries[correctAnswer].uppercased()
     }
+    
+    @IBAction func buttonTapped(_ sender: UIButton) {
+        var title: String
+        
+        if sender.tag == correctAnswer
+        {
+            title = "Correct"
+            score += 1
+        }
+        else
+        {
+            title = "Wrong"
+            score -= 1
+        }
+        
+        // for UIAlertController
+        // .alert --- inform the user about situation changes --- pop up message box over the center of the screen
+        // .actionSheet --- chose for a range of options --- slides options up from the bottom
+        
+        // for UIAlertAction
+        // .default .cancel .destroy
+        
+        /* from the transcript:
+            Warning: We must use askQuestion and not askQuestion(). If you use the former, it means "here's the name of the method to run," but if you use the latter it means "run the askQuestion() method now, and it will tell you the name of the method to run."
+        */
+ 
+        let ac = UIAlertController(title: title, message: "Your score is \(score)", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+        
+        present(ac, animated: true)
+    }
+    
 }
 
