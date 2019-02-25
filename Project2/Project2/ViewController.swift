@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet var button3: UIButton!
     
     var countries = [String]()
+    var numQuestionsAsked = 0
     var score = 0
     var correctAnswer = 0
     
@@ -52,11 +53,14 @@ class ViewController: UIViewController {
         button2.setImage(UIImage(named: countries[1]), for: .normal)
         button3.setImage(UIImage(named: countries[2]), for: .normal)
         
-        title = countries[correctAnswer].uppercased()
+        //title = countries[correctAnswer].uppercased()
+        title = "   SCORE \(score)/\(numQuestionsAsked)        \(countries[correctAnswer].uppercased())"
     }
     
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String
+        
+        numQuestionsAsked += 1
         
         if sender.tag == correctAnswer
         {
@@ -65,7 +69,7 @@ class ViewController: UIViewController {
         }
         else
         {
-            title = "Wrong"
+            title = "Wrong!\n That’s the flag of \(countries[sender.tag])"
             score -= 1
         }
         
@@ -79,11 +83,27 @@ class ViewController: UIViewController {
         /* from the transcript:
             Warning: We must use askQuestion and not askQuestion(). If you use the former, it means "here's the name of the method to run," but if you use the latter it means "run the askQuestion() method now, and it will tell you the name of the method to run."
         */
- 
-        let ac = UIAlertController(title: title, message: "Your score is \(score)", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+        if numQuestionsAsked == 10
+        {
+            let ac = UIAlertController(title: title, message: "Your final score is \(score)/\(numQuestionsAsked)", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Play Again", style: .default, handler: askQuestion))
+            
+            present(ac, animated: true)
+            
+            numQuestionsAsked = 0
+            score = 0
+            
+        }
         
-        present(ac, animated: true)
+        if numQuestionsAsked < 10 // basically an else
+        // but precising the condition makes it clearer for me when I read it
+        {
+            let ac = UIAlertController(title: title, message: "Your score is \(score)/\(numQuestionsAsked)", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+            
+            present(ac, animated: true)
+        }
+
     }
     
 }
