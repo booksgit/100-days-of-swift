@@ -16,6 +16,7 @@ import WebKit
 class ViewController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
     var progressView: UIProgressView!
+    var websites = ["apple.com", "xkcd.com", "hackingwithswift.com"]
 
     override func loadView() {
         // we create an instance of the class WKWebView
@@ -67,7 +68,8 @@ class ViewController: UIViewController, WKNavigationDelegate {
         // 2. you have a URL URL(myStr)
         // 3. turn the url into a URLRequest
         // 4. Then, you can load the url!
-        let url = URL(string: "https://www.hackingwithswift.com")! // URL is a specific "type"
+        // let url = URL(string: "https://www.hackingwithswift.com")! // URL is a specific "type"
+        let url = URL(string: "https://" + websites[0])! // apple.com
         webView.load(URLRequest(url: url))
         // move is the web browser using swipe left, right to go back to the previous page
         webView.allowsBackForwardNavigationGestures = true
@@ -77,10 +79,14 @@ class ViewController: UIViewController, WKNavigationDelegate {
     @objc func openTapped()
     {
         let ac = UIAlertController(title: "Open page...", message: nil, preferredStyle: .actionSheet)
-        ac.addAction(UIAlertAction(title: "apple.com", style: .default, handler: openPage))
-        ac.addAction(UIAlertAction(title: "hackingwithswift", style: .default, handler: openPage))
-        ac.addAction(UIAlertAction(title: "www.youtube.com/watch?v=HluANRwPyNo", style: .default, handler: openPage))
-         ac.addAction(UIAlertAction(title: "xkcd.com", style: .default, handler: openPage))
+        
+        // refactoring
+        // instead of adding all the websites one by oe we create a loop to do just that!
+        for website in websites
+        {
+                     ac.addAction(UIAlertAction(title: website, style: .default, handler: openPage))
+        }
+        
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         ac.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(ac, animated: true)
@@ -107,6 +113,31 @@ class ViewController: UIViewController, WKNavigationDelegate {
             progressView.progress = Float(webView.estimatedProgress)
         }
     }
+    
+    // we can check which part we are displaying
+    // we are creating a closure
+    // thanks to that we can ask the user stuff before loading the view
+    // this can be an ESCAPING CLOSURE the closure can return and be used again later and count as only one call ???
+    // CLOJURE basically an anonymous func
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            // the clojure
+        let url = navigationAction.request.url
+        // the clojure BEGINNING
+        if let host = url?.host
+        {
+            for website in websites
+            {
+                if host.contains(website)
+                {
+                    decisionHandler(.allow)
+                    return
+                }
+
+            }
+        }
+        decisionHandler(.cancel)
+    }
+          // the clojure END
     
 }
 
