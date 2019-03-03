@@ -136,6 +136,13 @@ class ViewController: UIViewController, WKNavigationDelegate {
             }
         }
         decisionHandler(.cancel)
+        
+        // challenge 1 Beginning
+        let urlNotAllowedAlert = UIAlertController(title: "Alert", message: "You are trying to access a website that is not allowed! For your safety this website will not display onscreen.", preferredStyle: .alert)
+        urlNotAllowedAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        self.present(urlNotAllowedAlert, animated: true)
+        // challenge 1 End
+        
     }
           // the clojure END
     
