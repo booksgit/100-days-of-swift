@@ -18,6 +18,8 @@ class ViewController: UIViewController, WKNavigationDelegate {
     var progressView: UIProgressView!
     var websites = ["apple.com", "xkcd.com", "hackingwithswift.com"]
 
+    
+    // loadView() is called before viewDidLoad()
     override func loadView() {
         // we create an instance of the class WKWebView
         // store it as a property in webView
@@ -50,6 +52,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
         // challenge 2 done
         
         
+        // Calling sizeToFit() on a view makes it take up the correct amount of space for its content
         progressView = UIProgressView(progressViewStyle: .default)
         progressView.sizeToFit()
         let progressButton = UIBarButtonItem(customView: progressView)
@@ -126,6 +129,8 @@ class ViewController: UIViewController, WKNavigationDelegate {
     // thanks to that we can ask the user stuff before loading the view
     // this can be an ESCAPING CLOSURE the closure can return and be used again later and count as only one call ???
     // CLOJURE basically an anonymous func
+    // A web view's navigation delegate can control which pages should be loaded
+    // Delegation allows one object to respond on behalf of another
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             // the clojure
         let url = navigationAction.request.url
