@@ -42,13 +42,20 @@ class ViewController: UIViewController, WKNavigationDelegate {
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.reload))
         
+        // challenge 2 start
+        //let backButton = UIBarButtonItem(barButtonSystemItem: .undo, target: webView, action: #selector(webView.goBack))
+        // almost the same line as the one below but you cannot change the title
+        let backButton = UIBarButtonItem(title: "Back", style: .done, target: webView, action: #selector(webView.goBack))
+        let fowardButton = UIBarButtonItem(title: "Foward", style: .done, target: webView, action: #selector(webView.goForward))
+        // challenge 2 done
+        
         
         progressView = UIProgressView(progressViewStyle: .default)
         progressView.sizeToFit()
         let progressButton = UIBarButtonItem(customView: progressView)
         
         // spacer and refresh will appear as having errors until the line below is written
-        toolbarItems = [progressButton, spacer, refresh]
+        toolbarItems = [progressButton, spacer, backButton, fowardButton, refresh]
         
         navigationController?.isToolbarHidden = false
         
